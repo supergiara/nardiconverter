@@ -5,60 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unit Converter</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
-
+        body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 0; padding: 0; }
         .container {
-            max-width: 650px;
-            margin: 30px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.15);
-            text-align: center;
+            max-width: 650px; margin: 30px auto; background: white; padding: 25px;
+            border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.15); text-align: center;
         }
-
-        img {
-            width: 180px;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            margin-bottom: 5px;
-            font-size: 32px;
-        }
-
+        img { width: 300px; margin-bottom: 20px; }
+        h1 { margin-bottom: 5px; font-size: 32px; }
         select, input, button {
-            width: 90%;
-            padding: 14px;
-            font-size: 18px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: 1px solid #ccc;
+            width: 90%; padding: 14px; font-size: 18px; margin: 10px 0;
+            border-radius: 10px; border: 1px solid #ccc;
         }
-
-        button {
-            background: #222;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #000;
-        }
-
+        button { background: #222; color: white; border: none; cursor: pointer; }
+        button:hover { background: #000; }
         .label {
-            font-weight: bold;
-            margin-top: 15px;
-            display: block;
-            text-align: left;
-            width: 90%;
-            margin-left: 5%;
+            font-weight: bold; margin-top: 15px; display: block; text-align: left;
+            width: 90%; margin-left: 5%;
+        }
+        #swapBtn {
+            width: 60px; padding: 10px; font-size: 22px; border-radius: 50%; margin: 10px auto;
         }
     </style>
 </head>
@@ -70,17 +35,21 @@
     <h1 id="title">Unit Converter</h1>
 
     <label class="label" id="chooseConvLabel">Choose conversion:</label>
+
     <select id="conversion">
         <option value="c_f">°C ↔ °F</option>
         <option value="bar_psi">bar ↔ psi</option>
         <option value="lmin_cfm">L/min ↔ CFM</option>
         <option value="kg_lb">kg ↔ lb</option>
+        <option value="g_oz">g ↔ oz</option>
         <option value="cm_in">cm ↔ inch</option>
         <option value="m_ft">meters ↔ feet</option>
     </select>
 
     <label class="label" id="inputLabel">Value to convert:</label>
     <input type="number" id="inputValue" placeholder="Enter value">
+
+    <button id="swapBtn">↔️</button>
 
     <label class="label" id="resultLabel">Result:</label>
     <input type="text" id="outputValue" readonly>
@@ -92,10 +61,11 @@
         <option value="en">English</option>
         <option value="it">Italiano</option>
     </select>
-
 </div>
 
 <script>
+let swapped = false;
+
 const elements = {
     title: document.getElementById("title"),
     chooseConvLabel: document.getElementById("chooseConvLabel"),
@@ -141,27 +111,36 @@ function updateLanguage() {
 document.getElementById("resetBtn").addEventListener("click", () => {
     document.getElementById("inputValue").value = "";
     document.getElementById("outputValue").value = "";
+    swapped = false;
+});
+
+document.getElementById("swapBtn").addEventListener("click", () => {
+    swapped = !swapped;
+    convert();
 });
 
 document.getElementById("inputValue").addEventListener("input", convert);
+
+document.getElementById("conversion").addEventListener("change", convert);
 
 function convert() {
     let val = parseFloat(document.getElementById("inputValue").value);
     if (isNaN(val)) { document.getElementById("outputValue").value = ""; return; }
 
     const type = document.getElementById("conversion").value;
-    let result = "";
+    let result = 0;
 
     switch(type) {
-        case "c_f": result = (val * 9/5 + 32).toFixed(2); break;
-        case "bar_psi": result = (val * 14.5038).toFixed(3); break;
-        case "lmin_cfm": result = (val / 28.3168).toFixed(3); break;
-        case "kg_lb": result = (val * 2.20462).toFixed(3); break;
-        case "cm_in": result = (val * 0.393701).toFixed(3); break;
-        case "m_ft": result = (val * 3.28084).toFixed(3); break;
+        case "c_f": result = swapped ? ( (val - 32) * 5/9 ) : ( val * 9/5 + 32 ); break;
+        case "bar_psi": result = swapped ? ( val / 14.5038 ) : ( val * 14.5038 ); break;
+        case "lmin_cfm": result = swapped ? ( val * 28.3168 ) : ( val / 28.3168 ); break;
+        case "kg_lb": result = swapped ? ( val / 2.20462 ) : ( val * 2.20462 ); break;
+        case "g_oz": result = swapped ? ( val / 0.035274 ) : ( val * 0.035274 ); break;
+        case "cm_in": result = swapped ? ( val / 0.393701 ) : ( val * 0.393701 ); break;
+        case "m_ft": result = swapped ? ( val / 3.28084 ) : ( val * 3.28084 ); break;
     }
 
-    document.getElementById("outputValue").value = result;
+    document.getElementById("outputValue").value = result.toFixed(3);
 }
 </script>
 
