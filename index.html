@@ -15,10 +15,10 @@
     }
     .container {
       background: white;
-      padding: 20px 20px 25px 20px;
+      padding: 25px;
       border-radius: 12px;
       width: 100%;
-      max-width: 400px;
+      max-width: 480px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     .top-bar {
@@ -27,52 +27,39 @@
       margin-bottom: 15px;
     }
     .logo {
-      width: 220px;
+      width: 250px;
       display: block;
       margin: 0 auto;
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 18px;
-      font-size: 1.6em;
-    }
     select, input {
       width: 100%;
-      padding: 12px;
-      margin: 8px 0;
+      padding: 14px;
+      margin: 12px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
-      height: 42px;
+      height: 48px;
       box-sizing: border-box;
     }
     button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       border: none;
+      background: #111;
+      color: white;
       border-radius: 8px;
       font-size: 16px;
+      margin-top: 12px;
       cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.2s;
     }
     .switch-btn {
       background: #e0e0e0;
       color: #000;
-    }
-    .switch-btn:hover {
-      background: #d0d0d0;
-    }
-    #resetBtn {
-      background: #111;
-      color: #fff;
-    }
-    #resetBtn:hover {
-      background: #333;
+      margin-top: 0;
     }
     label {
       font-weight: bold;
-      margin-top: 8px;
+      margin-top: 10px;
       display: block;
     }
   </style>
@@ -84,7 +71,7 @@
       <img src="logo.png" class="logo" alt="Nardi Logo" />
     </div>
 
-    <h2>Unit Converter</h2>
+    <h2 style="text-align:center; margin-bottom:20px">Unit Converter</h2>
 
     <label id="labelConversion">Choose conversion:</label>
     <select id="conversionSelect">
@@ -143,9 +130,9 @@ function convert() {
   let result;
   if (reverse) {
     if (c.reverse) {
-      result = c.reverse(val); // °C ↔ °F
+      result = c.reverse(val); // solo per °C ↔ °F
     } else {
-      result = val / c.f(1);
+      result = val / c.f(1);   // divisione per il fattore
     }
   } else {
     result = c.f(val);
@@ -153,7 +140,13 @@ function convert() {
   inB.value = result;
 }
 
-// Aggiornamento live
-inA.addEventListener('input', convert);
-sel.addEventListener('change', convert);
-swapBtn.addEventListener('click
+sel.onchange = updateUnits;
+inA.oninput = convert;
+swapBtn.onclick = ()=>{ reverse = !reverse; updateUnits(); };
+document.getElementById("resetBtn").onclick = ()=>{ inA.value=""; inB.value=""; };
+
+updateUnits();
+</script>
+
+</body>
+</html>
