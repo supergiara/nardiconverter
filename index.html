@@ -87,9 +87,7 @@
     <label id="labelInput">Value to convert (<span id="unitA">unit</span>):</label>
     <input id="inputA" placeholder="Enter value" />
 
-    <button id="swapBtn" class="switch-btn">
-      Switch
-    </button>
+    <button id="swapBtn" class="switch-btn">Switch</button>
 
     <label id="labelOutput">Result (<span id="unitB">unit</span>):</label>
     <input id="inputB" disabled />
@@ -101,9 +99,9 @@
 const conversions = {
   "bar-psi": { a:"bar", b:"psi", f:x=>x*14.5037738 },
   "lmin-cfm": { a:"L/min", b:"cfm", f:x=>x*0.0353146667 },
-  "celsius-fahrenheit": { a:"°C", b:"°F", f:x=>x*9/5+32 },
+  "celsius-fahrenheit": { a:"°C", b:"°F", f:x=>x*9/5+32, reverse:x=>(x-32)*5/9 },
   "kg-lb": { a:"kg", b:"lb", f:x=>x*2.20462262185 },
-  "g-oz": { a:"g", b:"oz", f:x=>x*0.03527396 },
+  "g-oz": { a:"g", b:"oz", f:x=>x*0.03527396195 },
   "cm-in": { a:"cm", b:"in", f:x=>x*0.3937007874 },
   "m-ft": { a:"m", b:"ft", f:x=>x*3.280839895 }
 };
@@ -128,7 +126,17 @@ function convert() {
   const c = conversions[sel.value];
   const val = parseFloat(inA.value.replace(",","."));
   if (isNaN(val)) { inB.value=""; return; }
-  const result = reverse ? (val - (c.f(0) - 32)) *5/9 : c.f(val);
+
+  let result;
+  if (reverse) {
+    if (c.reverse) {
+      result = c.reverse(val); // solo per °C ↔ °F
+    } else {
+      result = val / c.f(1);   // divisione per il fattore
+    }
+  } else {
+    result = c.f(val);
+  }
   inB.value = result;
 }
 
