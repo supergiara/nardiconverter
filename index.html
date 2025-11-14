@@ -1,147 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit Converter</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 0; padding: 0; }
-        .container {
-            max-width: 650px; margin: 30px auto; background: white; padding: 25px;
-            border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.15); text-align: center;
-        }
-        img { width: 300px; margin-bottom: 20px; }
-        h1 { margin-bottom: 5px; font-size: 32px; }
-        select, input, button {
-            width: 90%; padding: 14px; font-size: 18px; margin: 10px 0;
-            border-radius: 10px; border: 1px solid #ccc;
-        }
-        button { background: #222; color: white; border: none; cursor: pointer; }
-        button:hover { background: #000; }
-        .label {
-            font-weight: bold; margin-top: 15px; display: block; text-align: left;
-            width: 90%; margin-left: 5%;
-        }
-        #swapBtn {
-            width: 60px; padding: 10px; font-size: 22px; border-radius: 50%; margin: 10px auto;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lang-select {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+    .logo {
+      width: 180px;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #111;
+      color: white;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+    .swap-btn {
+      background: #e0e0e0;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 10px 0 0 0;
+    }
+    .arrow-icon {
+      width: 18px;
+      height: 18px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
 
-<div class="container">
-    <img src="logo.png" alt="Nardi Compressori">
+    <div class="top-bar">
+      <img src="logo.png" class="logo" alt="Nardi Logo" />
 
-    <h1 id="title">Unit Converter</h1>
+      <div class="lang-select">
+        <img src="https://flagcdn.com/h20/it.png" /> IT
+        <input type="radio" name="lang" value="it" checked />
+        <img src="https://flagcdn.com/h20/gb.png" /> EN
+        <input type="radio" name="lang" value="en" />
+      </div>
+    </div>
 
-    <label class="label" id="chooseConvLabel">Choose conversion:</label>
+    <h2 style="text-align:center; margin-bottom:20px">Unit Converter</h2>
 
-    <select id="conversion">
-        <option value="c_f">°C ↔ °F</option>
-        <option value="bar_psi">bar ↔ psi</option>
-        <option value="lmin_cfm">L/min ↔ CFM</option>
-        <option value="kg_lb">kg ↔ lb</option>
-        <option value="g_oz">g ↔ oz</option>
-        <option value="cm_in">cm ↔ inch</option>
-        <option value="m_ft">meters ↔ feet</option>
+    <label id="labelConversion">Choose conversion:</label>
+    <select id="conversionSelect">
+      <option value="bar-psi">bar ↔ psi</option>
+      <option value="lmin-cfm">L/min ↔ cfm</option>
+      <option value="celsius-fahrenheit">°C ↔ °F</option>
+      <option value="kg-lb">kg ↔ lb</option>
+      <option value="g-oz">g ↔ oz</option>
+      <option value="cm-in">cm ↔ in</option>
+      <option value="m-ft">m ↔ ft</option>
     </select>
 
-    <label class="label" id="inputLabel">Value to convert:</label>
-    <input type="number" id="inputValue" placeholder="Enter value">
+    <label id="labelInput">Value to convert (<span id="unitA">unit</span>):</label>
+    <input id="inputA" placeholder="Enter value" />
 
-    <button id="swapBtn">↔️</button>
+    <button id="swapBtn" class="swap-btn">
+      <img class="arrow-icon" src="https://cdn-icons-png.flaticon.com/512/4721/4721493.png" />
+      Swap units
+    </button>
 
-    <label class="label" id="resultLabel">Result:</label>
-    <input type="text" id="outputValue" readonly>
+    <label id="labelOutput">Result (<span id="unitB">unit</span>):</label>
+    <input id="inputB" disabled />
 
     <button id="resetBtn">Reset</button>
-
-    <label class="label" id="languageLabel">Language:</label>
-    <select id="language">
-        <option value="en">English</option>
-        <option value="it">Italiano</option>
-    </select>
-</div>
+  </div>
 
 <script>
-let swapped = false;
-
-const elements = {
-    title: document.getElementById("title"),
-    chooseConvLabel: document.getElementById("chooseConvLabel"),
-    inputLabel: document.getElementById("inputLabel"),
-    resultLabel: document.getElementById("resultLabel"),
-    resetBtn: document.getElementById("resetBtn"),
-    languageLabel: document.getElementById("languageLabel")
+const conversions = {
+  "bar-psi": { a:"bar", b:"psi", f:x=>x*14.5037738 },
+  "lmin-cfm": { a:"L/min", b:"cfm", f:x=>x*0.0353146667 },
+  "celsius-fahrenheit": { a:"°C", b:"°F", f:x=>x*9/5+32 },
+  "kg-lb": { a:"kg", b:"lb", f:x=>x*2.20462262185 },
+  "g-oz": { a:"g", b:"oz", f:x=>x*0.03527396 },
+  "cm-in": { a:"cm", b:"in", f:x=>x*0.3937007874 },
+  "m-ft": { a:"m", b:"ft", f:x=>x*3.280839895 }
 };
 
-const translations = {
-    en: {
-        title: "Unit Converter",
-        chooseConvLabel: "Choose conversion:",
-        inputLabel: "Value to convert:",
-        resultLabel: "Result:",
-        resetBtn: "Reset",
-        languageLabel: "Language:"
-    },
-    it: {
-        title: "Convertitore di Unità",
-        chooseConvLabel: "Scegli conversione:",
-        inputLabel: "Valore da convertire:",
-        resultLabel: "Risultato:",
-        resetBtn: "Reset",
-        languageLabel: "Lingua:"
-    }
-};
+let reverse = false;
 
-document.getElementById("language").addEventListener("change", updateLanguage);
+const sel = document.getElementById("conversionSelect");
+const inA = document.getElementById("inputA");
+const inB = document.getElementById("inputB");
+const unitA = document.getElementById("unitA");
+const unitB = document.getElementById("unitB");
+const swapBtn = document.getElementById("swapBtn");
 
-function updateLanguage() {
-    const lang = document.getElementById("language").value;
-    const t = translations[lang];
-
-    elements.title.textContent = t.title;
-    elements.chooseConvLabel.textContent = t.chooseConvLabel;
-    elements.inputLabel.textContent = t.inputLabel;
-    elements.resultLabel.textContent = t.resultLabel;
-    elements.resetBtn.textContent = t.resetBtn;
-    elements.languageLabel.textContent = t.languageLabel;
+function updateUnits() {
+  const c = conversions[sel.value];
+  unitA.textContent = reverse ? c.b : c.a;
+  unitB.textContent = reverse ? c.a : c.b;
+  convert();
 }
-
-document.getElementById("resetBtn").addEventListener("click", () => {
-    document.getElementById("inputValue").value = "";
-    document.getElementById("outputValue").value = "";
-    swapped = false;
-});
-
-document.getElementById("swapBtn").addEventListener("click", () => {
-    swapped = !swapped;
-    convert();
-});
-
-document.getElementById("inputValue").addEventListener("input", convert);
-
-document.getElementById("conversion").addEventListener("change", convert);
 
 function convert() {
-    let val = parseFloat(document.getElementById("inputValue").value);
-    if (isNaN(val)) { document.getElementById("outputValue").value = ""; return; }
-
-    const type = document.getElementById("conversion").value;
-    let result = 0;
-
-    switch(type) {
-        case "c_f": result = swapped ? ( (val - 32) * 5/9 ) : ( val * 9/5 + 32 ); break;
-        case "bar_psi": result = swapped ? ( val / 14.5038 ) : ( val * 14.5038 ); break;
-        case "lmin_cfm": result = swapped ? ( val * 28.3168 ) : ( val / 28.3168 ); break;
-        case "kg_lb": result = swapped ? ( val / 2.20462 ) : ( val * 2.20462 ); break;
-        case "g_oz": result = swapped ? ( val / 0.035274 ) : ( val * 0.035274 ); break;
-        case "cm_in": result = swapped ? ( val / 0.393701 ) : ( val * 0.393701 ); break;
-        case "m_ft": result = swapped ? ( val / 3.28084 ) : ( val * 3.28084 ); break;
-    }
-
-    document.getElementById("outputValue").value = result.toFixed(3);
+  const c = conversions[sel.value];
+  const val = parseFloat(inA.value.replace(",","."));
+  if (isNaN(val)) { inB.value=""; return; }
+  const result = reverse ? (val - (c.f(0) - 32)) *5/9 : c.f(val);
+  inB.value = result;
 }
+
+sel.onchange = updateUnits;
+inA.oninput = convert;
+swapBtn.onclick = ()=>{ reverse = !reverse; updateUnits(); };
+document.getElementById("resetBtn").onclick = ()=>{ inA.value=""; inB.value=""; };
+
+updateUnits();
 </script>
 
 </body>
