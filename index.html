@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nardi Compressori - Unit Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+    img.logo {
+      max-width: 260px;
+      margin-bottom: 20px;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+      background: #222;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" class="logo" alt="Nardi Compressori" />
+    <h2 id="title">Convertitore Unità - Nardi Compressori</h2>
+
+    <label id="lblConv">Scegli conversione:</label>
+    <select id="pair">
+      <option value="bar-psi">bar ↔ psi</option>
+      <option value="lmin-cfm">L/min ↔ cfm</option>
+      <option value="celsius-fahrenheit">°C ↔ °F</option>
+      <option value="kg-lb">kg ↔ lb</option>
+      <option value="cm-in">cm ↔ in</option>
+      <option value="m-ft">m ↔ ft</option>
+    </select>
+
+    <input id="left" placeholder="Inserisci valore" />
+    <input id="right" placeholder="Inserisci valore" />
+
+    <button id="swapBtn">Scambia</button>
+    <button id="resetBtn">Azzera</button>
+
+    <br><br>
+    <label>Lingua:</label>
+    <select id="lang">
+      <option value="it">Italiano</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+<script>
+  const left = document.getElementById("left");
+  const right = document.getElementById("right");
+  const pairSel = document.getElementById("pair");
+  const langSel = document.getElementById("lang");
+  const title = document.getElementById("title");
+  const lblConv = document.getElementById("lblConv");
+  const swapBtn = document.getElementById("swapBtn");
+  const resetBtn = document.getElementById("resetBtn");
+
+  const t = {
+    it: {
+      title: "Convertitore Unità - Nardi Compressori",
+      choose: "Scegli conversione:",
+      insert: "Inserisci valore",
+      swap: "Scambia",
+      reset: "Azzera"
+    },
+    en: {
+      title: "Unit Converter - Nardi Compressors",
+      choose: "Choose conversion:",
+      insert: "Enter value",
+      swap: "Swap",
+      reset: "Reset"
+    }
+  };
+
+  function applyLang() {
+    const L = t[langSel.value];
+    title.textContent = L.title;
+    lblConv.textContent = L.choose;
+    left.placeholder = L.insert;
+    right.placeholder = L.insert;
+    swapBtn.textContent = L.swap;
+    resetBtn.textContent = L.reset;
+  }
+
+  langSel.addEventListener("change", applyLang);
+  applyLang();
+
+  const conv = {
+    "bar-psi": {
+      L: (x) => x * 14.5037738,
+      R: (y) => y / 14.5037738,
+    },
+    "lmin-cfm": {
+      L: (x) => x * 0.0353146667,
+      R: (y) => y / 0.0353146667,
+    },
+    "celsius-fahrenheit": {
+      L: (x) => x * 9/5 + 32,
+      R: (y) => (y - 32) * 5/9,
+    },
+    "kg-lb": {
+      L: (x) => x * 2.20462262185,
+      R: (y) => y / 2.20462262185,
+    },
+    "cm-in": {
+      L: (x) => x * 0.3937007874,
+      R: (y) => y / 0.3937007874,
+    },
+    "m-ft": {
+      L: (x) => x * 3.280839895,
+      R: (y) => y / 3.280839895,
+    },
+  };
+
+  function parse(v) {
+    if (!v) return NaN;
+    return Number(v.replace(",", "."));
+  }
+
+  left.addEventListener("input", () => {
+    const x = parse(left.value);
+    if (isFinite(x)) right.value = conv[pairSel.value].L(x);
+  });
+
+  right.addEventListener("input", () => {
+    const y = parse(right.value);
+    if (isFinite(y)) left.value = conv[pairSel.value].R(y);
+  });
+
+  pairSel.addEventListener("change", () => {
+    left.value = "";
+    right.value = "";
+  });
+
+  swapBtn.addEventListener("click", () => {
+    const temp = left.value;
+    left.value = right.value;
+    right.value = temp;
+  });
+
+  resetBtn.addEventListener("click", () => {
+    left.value = "";
+    right.value = "";
+  });
+</script>
+</body>
+</html>
