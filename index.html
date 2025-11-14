@@ -1,170 +1,169 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nardi Compressori - Unit Converter</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-    .container {
-      background: white;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    }
-    img.logo {
-      max-width: 260px;
-      margin-bottom: 20px;
-    }
-    select, input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      cursor: pointer;
-      background: #222;
-      color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        img {
+            width: 180px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+            font-size: 32px;
+        }
+
+        select, input, button {
+            width: 90%;
+            padding: 14px;
+            font-size: 18px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #222;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #000;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+            text-align: left;
+            width: 90%;
+            margin-left: 5%;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <img src="logo.png" class="logo" alt="Nardi Compressori" />
-    <h2 id="title">Convertitore Unità - Nardi Compressori</h2>
 
-    <label id="lblConv">Scegli conversione:</label>
-    <select id="pair">
-      <option value="bar-psi">bar ↔ psi</option>
-      <option value="lmin-cfm">L/min ↔ cfm</option>
-      <option value="celsius-fahrenheit">°C ↔ °F</option>
-      <option value="kg-lb">kg ↔ lb</option>
-      <option value="cm-in">cm ↔ in</option>
-      <option value="m-ft">m ↔ ft</option>
+<div class="container">
+    <img src="logo.png" alt="Nardi Compressori">
+
+    <h1 id="title">Unit Converter</h1>
+
+    <label class="label" id="chooseConvLabel">Choose conversion:</label>
+    <select id="conversion">
+        <option value="c_f">°C ↔ °F</option>
+        <option value="bar_psi">bar ↔ psi</option>
+        <option value="lmin_cfm">L/min ↔ CFM</option>
+        <option value="kg_lb">kg ↔ lb</option>
+        <option value="cm_in">cm ↔ inch</option>
+        <option value="m_ft">meters ↔ feet</option>
     </select>
 
-    <input id="left" placeholder="Inserisci valore" />
-    <input id="right" placeholder="Inserisci valore" />
+    <label class="label" id="inputLabel">Value to convert:</label>
+    <input type="number" id="inputValue" placeholder="Enter value">
 
-    <button id="swapBtn">Scambia</button>
-    <button id="resetBtn">Azzera</button>
+    <label class="label" id="resultLabel">Result:</label>
+    <input type="text" id="outputValue" readonly>
 
-    <br><br>
-    <label>Lingua:</label>
-    <select id="lang">
-      <option value="it">Italiano</option>
-      <option value="en">English</option>
+    <button id="resetBtn">Nuovo</button>
+
+    <label class="label" id="languageLabel">Language:</label>
+    <select id="language">
+        <option value="en">English</option>
+        <option value="it">Italiano</option>
     </select>
-  </div>
+
+</div>
 
 <script>
-  const left = document.getElementById("left");
-  const right = document.getElementById("right");
-  const pairSel = document.getElementById("pair");
-  const langSel = document.getElementById("lang");
-  const title = document.getElementById("title");
-  const lblConv = document.getElementById("lblConv");
-  const swapBtn = document.getElementById("swapBtn");
-  const resetBtn = document.getElementById("resetBtn");
+const elements = {
+    title: document.getElementById("title"),
+    chooseConvLabel: document.getElementById("chooseConvLabel"),
+    inputLabel: document.getElementById("inputLabel"),
+    resultLabel: document.getElementById("resultLabel"),
+    resetBtn: document.getElementById("resetBtn"),
+    languageLabel: document.getElementById("languageLabel")
+};
 
-  const t = {
-    it: {
-      title: "Convertitore Unità - Nardi Compressori",
-      choose: "Scegli conversione:",
-      insert: "Inserisci valore",
-      swap: "Scambia",
-      reset: "Azzera"
-    },
+const translations = {
     en: {
-      title: "Unit Converter - Nardi Compressors",
-      choose: "Choose conversion:",
-      insert: "Enter value",
-      swap: "Swap",
-      reset: "Reset"
+        title: "Unit Converter",
+        chooseConvLabel: "Choose conversion:",
+        inputLabel: "Value to convert:",
+        resultLabel: "Result:",
+        resetBtn: "New",
+        languageLabel: "Language:"
+    },
+    it: {
+        title: "Convertitore di Unità",
+        chooseConvLabel: "Scegli conversione:",
+        inputLabel: "Valore da convertire:",
+        resultLabel: "Risultato:",
+        resetBtn: "Nuovo",
+        languageLabel: "Lingua:"
     }
-  };
+};
 
-  function applyLang() {
-    const L = t[langSel.value];
-    title.textContent = L.title;
-    lblConv.textContent = L.choose;
-    left.placeholder = L.insert;
-    right.placeholder = L.insert;
-    swapBtn.textContent = L.swap;
-    resetBtn.textContent = L.reset;
-  }
+document.getElementById("language").addEventListener("change", updateLanguage);
 
-  langSel.addEventListener("change", applyLang);
-  applyLang();
+function updateLanguage() {
+    const lang = document.getElementById("language").value;
+    const t = translations[lang];
 
-  const conv = {
-    "bar-psi": {
-      L: (x) => x * 14.5037738,
-      R: (y) => y / 14.5037738,
-    },
-    "lmin-cfm": {
-      L: (x) => x * 0.0353146667,
-      R: (y) => y / 0.0353146667,
-    },
-    "celsius-fahrenheit": {
-      L: (x) => x * 9/5 + 32,
-      R: (y) => (y - 32) * 5/9,
-    },
-    "kg-lb": {
-      L: (x) => x * 2.20462262185,
-      R: (y) => y / 2.20462262185,
-    },
-    "cm-in": {
-      L: (x) => x * 0.3937007874,
-      R: (y) => y / 0.3937007874,
-    },
-    "m-ft": {
-      L: (x) => x * 3.280839895,
-      R: (y) => y / 3.280839895,
-    },
-  };
+    elements.title.textContent = t.title;
+    elements.chooseConvLabel.textContent = t.chooseConvLabel;
+    elements.inputLabel.textContent = t.inputLabel;
+    elements.resultLabel.textContent = t.resultLabel;
+    elements.resetBtn.textContent = t.resetBtn;
+    elements.languageLabel.textContent = t.languageLabel;
+}
 
-  function parse(v) {
-    if (!v) return NaN;
-    return Number(v.replace(",", "."));
-  }
+document.getElementById("resetBtn").addEventListener("click", () => {
+    document.getElementById("inputValue").value = "";
+    document.getElementById("outputValue").value = "";
+});
 
-  left.addEventListener("input", () => {
-    const x = parse(left.value);
-    if (isFinite(x)) right.value = conv[pairSel.value].L(x);
-  });
+document.getElementById("inputValue").addEventListener("input", convert);
 
-  right.addEventListener("input", () => {
-    const y = parse(right.value);
-    if (isFinite(y)) left.value = conv[pairSel.value].R(y);
-  });
+function convert() {
+    let val = parseFloat(document.getElementById("inputValue").value);
+    if (isNaN(val)) { document.getElementById("outputValue").value = ""; return; }
 
-  pairSel.addEventListener("change", () => {
-    left.value = "";
-    right.value = "";
-  });
+    const type = document.getElementById("conversion").value;
+    let result = "";
 
-  swapBtn.addEventListener("click", () => {
-    const temp = left.value;
-    left.value = right.value;
-    right.value = temp;
-  });
+    switch(type) {
+        case "c_f": result = (val * 9/5 + 32).toFixed(2); break;
+        case "bar_psi": result = (val * 14.5038).toFixed(3); break;
+        case "lmin_cfm": result = (val / 28.3168).toFixed(3); break;
+        case "kg_lb": result = (val * 2.20462).toFixed(3); break;
+        case "cm_in": result = (val * 0.393701).toFixed(3); break;
+        case "m_ft": result = (val * 3.28084).toFixed(3); break;
+    }
 
-  resetBtn.addEventListener("click", () => {
-    left.value = "";
-    right.value = "";
-  });
+    document.getElementById("outputValue").value = result;
+}
 </script>
+
 </body>
 </html>
